@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.onyx.notes.HomeFragment"
+        android:name="com.onyx.notes.fragments.HomeFragment"
         android:label="Note"
         tools:layout="@layout/fragment_home" >
         <action
@@ -27,7 +27,7 @@
     </fragment>
     <fragment
         android:id="@+id/newNoteFragment"
-        android:name="com.onyx.notes.NewNoteFragment"
+        android:name="com.onyx.notes.fragments.NewNoteFragment"
         android:label="New Note"
         tools:layout="@layout/fragment_new_note" >
         <action
@@ -40,7 +40,7 @@
     </fragment>
     <fragment
         android:id="@+id/updateNoteFragment"
-        android:name="com.onyx.notes.UpdateNoteFragment"
+        android:name="com.onyx.notes.fragments.UpdateNoteFragment"
         android:label="fragment_update_note"
         tools:layout="@layout/fragment_update_note" >
         <action
