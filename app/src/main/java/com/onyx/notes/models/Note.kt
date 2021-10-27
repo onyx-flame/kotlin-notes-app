@@ -6,6 +6,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.Relation
 import kotlinx.parcelize.Parcelize
+import java.util.*
 
 
 @Entity(tableName = "notes")
@@ -15,6 +16,7 @@ data class Note (
     val id: Int,
     val noteTitle: String,
     val noteBody: String,
+    var lastUpdated: Date
 ) : Parcelable
 
 @Entity(tableName = "hashtags")

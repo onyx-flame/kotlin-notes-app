@@ -14,6 +14,7 @@ import com.onyx.notes.models.Hashtag
 import com.onyx.notes.models.Note
 import com.onyx.notes.models.NoteWithHashTags
 import com.onyx.notes.viewmodel.NoteViewModel
+import java.util.*
 
 class UpdateNoteFragment : Fragment(R.layout.fragment_update_note) {
 
@@ -50,7 +51,7 @@ class UpdateNoteFragment : Fragment(R.layout.fragment_update_note) {
             val title = binding.etNoteTitleUpdate.text.toString()
             val body = binding.etNoteBodyUpdate.text.toString()
             if (title.isNotEmpty()) {
-                val note = Note(currentNote.note.id, title, body)
+                val note = Note(currentNote.note.id, title, body, Date())
                 val hashtags: List<Hashtag> = listOf(Hashtag(0,0,"tag228"), Hashtag(0,0,"tag337"))
                 noteViewModel.updateNote(note, hashtags)
 

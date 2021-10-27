@@ -1,5 +1,6 @@
 package com.onyx.notes.fragments
 
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.*
 import android.widget.SearchView
@@ -48,9 +49,16 @@ class HomeFragment : Fragment(R.layout.fragment_home), SearchView.OnQueryTextLis
 
     private fun setUpRecyclerView() {
         noteAdapter = NoteAdapter()
+        val spanCount =
+            if (resources.configuration.orientation != Configuration.ORIENTATION_PORTRAIT) {
+                2
+            } else {
+                1
+            }
+
         binding.recyclerView.apply {
             layoutManager = StaggeredGridLayoutManager(
-                2,
+                spanCount,
                 StaggeredGridLayoutManager.VERTICAL
             )
 

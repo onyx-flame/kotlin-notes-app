@@ -12,6 +12,7 @@ import com.onyx.notes.databinding.FragmentNewNoteBinding
 import com.onyx.notes.models.Hashtag
 import com.onyx.notes.models.Note
 import com.onyx.notes.viewmodel.NoteViewModel
+import java.util.*
 
 class NewNoteFragment : Fragment(R.layout.fragment_new_note) {
 
@@ -45,7 +46,7 @@ class NewNoteFragment : Fragment(R.layout.fragment_new_note) {
         val noteTitle = binding.etNoteTitle.text.toString().trim()
         val noteBody = binding.etNoteBody.text.toString().trim()
         if (noteTitle.isNotEmpty()) {
-            val note = Note(0,noteTitle,noteBody)
+            val note = Note(0,noteTitle,noteBody, Date())
             val hashtags: List<Hashtag> = listOf(Hashtag(0,0,"tag1"), Hashtag(0,0,"tag3"))
             noteViewModel.addNote(note, hashtags)
             Snackbar.make(view, "Note saved", Snackbar.LENGTH_SHORT).show()
