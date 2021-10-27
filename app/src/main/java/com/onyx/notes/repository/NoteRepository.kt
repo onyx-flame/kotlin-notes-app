@@ -9,5 +9,6 @@ class NoteRepository(private val db: NoteDatabase)  {
     suspend fun addNote(note: Note, hashtags: List<Hashtag>) = db.getNoteDao().addNoteWithHashtags(note, hashtags)
     suspend fun updateNote(note: Note, hashtags: List<Hashtag>) = db.getNoteDao().updateNoteWithHashtags(note, hashtags)
     suspend fun deleteNote(note: Note) = db.getNoteDao().deleteNoteWithHashtags(note)
-    fun getNotesByName(query: String?) = db.getNoteDao().getNotesWithHashtagsByName(query)
+    fun getNotesSortedByName(query: String?) = db.getNoteDao().getNotesWithHashtagsSortedByName(query)
+    fun getNotesSortedByDate(query: String?) = db.getNoteDao().getNotesWithHashtagsSortedByDate(query)
 }

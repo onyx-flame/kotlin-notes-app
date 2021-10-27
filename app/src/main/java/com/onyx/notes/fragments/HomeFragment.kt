@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.*
 import android.widget.SearchView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.onyx.notes.MainActivity
@@ -13,6 +14,7 @@ import com.onyx.notes.adapter.NoteAdapter
 import com.onyx.notes.databinding.FragmentHomeBinding
 import com.onyx.notes.models.NoteWithHashTags
 import com.onyx.notes.viewmodel.NoteViewModel
+import com.onyx.notes.viewmodel.SortTypeViewModel
 
 class HomeFragment : Fragment(R.layout.fragment_home), SearchView.OnQueryTextListener {
 
@@ -20,6 +22,7 @@ class HomeFragment : Fragment(R.layout.fragment_home), SearchView.OnQueryTextLis
     private val binding get() = _binding!!
     private lateinit var noteViewModel: NoteViewModel
     private lateinit var noteAdapter: NoteAdapter
+    private lateinit var sortTypeViewModel: SortTypeViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,6 +42,7 @@ class HomeFragment : Fragment(R.layout.fragment_home), SearchView.OnQueryTextLis
         super.onViewCreated(view, savedInstanceState)
 
         noteViewModel = (activity as MainActivity).noteViewModel
+        sortTypeViewModel = ViewModelProvider(requireActivity()).get(SortTypeViewModel::class.java)
         setUpRecyclerView()
 
         binding.fabAddNote.setOnClickListener { mView ->
@@ -66,10 +70,18 @@ class HomeFragment : Fragment(R.layout.fragment_home), SearchView.OnQueryTextLis
             adapter = noteAdapter
         }
         activity?.let {
-            noteViewModel.getAllNotes().observe(viewLifecycleOwner, { note ->
-                noteAdapter.differ.submitList(note)
-                updateUI(note)
-            })
+            if (sortTypeViewModel.isSortByDate()) {
+                noteViewModel.getNotesSortedByDate().observe(viewLifecycleOwner, { note ->
+                    noteAdapter.differ.submitList(note)
+                    updateUI(note)
+                })
+            }
+            if (sortTypeViewModel.isSortByName()){
+                noteViewModel.getNotesSortedByName().observe(viewLifecycleOwner, { note ->
+                    noteAdapter.differ.submitList(note)
+                    updateUI(note)
+                })
+            }
         }
 
     }
@@ -89,28 +101,46 @@ class HomeFragment : Fragment(R.layout.fragment_home), SearchView.OnQueryTextLis
         inflater.inflate(R.menu.home_menu, menu)
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId) {
+            R.id.sort_by_date -> {
+                sortTypeViewModel.setSortByDate()
+            }
+            R.id.sort_by_name -> {
+                sortTypeViewModel.setSortByName()
+
+            }
+        }
+        searchNotes("")
+
+        return super.onOptionsItemSelected(item)
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
 
     override fun onQueryTextSubmit(query: String?): Boolean {
-        if (query != null) {
-            searchNotes(query)
-        }
+        searchNotes(query)
         return true
     }
 
     override fun onQueryTextChange(query: String?): Boolean {
-        if (query != null) {
-            searchNotes(query)
-        }
+        searchNotes(query)
         return true
     }
 
-    private fun searchNotes(query: String?) {
-        noteViewModel.getNotesByName(query).observe(this, { list ->
-            noteAdapter.differ.submitList(list)
-        })
+    private fun searchNotes(query: String? = "") {
+        if (sortTypeViewModel.isSortByName()) {
+            noteViewModel.getNotesSortedByName(query).observe(this, { list ->
+                noteAdapter.differ.submitList(list)
+            })
+        }
+        if (sortTypeViewModel.isSortByDate()) {
+            noteViewModel.getNotesSortedByDate(query).observe(this, { list ->
+                noteAdapter.differ.submitList(list)
+            })
+        }
     }
 }

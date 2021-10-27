@@ -49,7 +49,11 @@ interface NoteDao {
         deleteNote(note)
     }
 
-    @Query("SELECT * FROM notes WHERE instr(noteTitle, :query) > 0")
-    fun getNotesWithHashtagsByName(query: String?): LiveData<List<NoteWithHashTags>>
+    @Query("SELECT * FROM notes WHERE instr(noteTitle, :query) > 0 ORDER BY noteTitle ASC")
+    fun getNotesWithHashtagsSortedByName(query: String?): LiveData<List<NoteWithHashTags>>
+
+    @Query("SELECT * FROM notes WHERE instr(noteTitle, :query) > 0 ORDER BY lastUpdated DESC")
+    fun getNotesWithHashtagsSortedByDate(query: String?): LiveData<List<NoteWithHashTags>>
+
 
 }
