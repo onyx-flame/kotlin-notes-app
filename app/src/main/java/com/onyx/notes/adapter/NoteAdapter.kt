@@ -1,5 +1,6 @@
 package com.onyx.notes.adapter
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.navigation.findNavController
@@ -42,6 +43,16 @@ class NoteAdapter: RecyclerView.Adapter<NoteAdapter.NoteViewHolder>() {
         holder.itemView.apply {
             binding?.tvNoteTitle?.text = currentNote.note.noteTitle
             binding?.tvNoteBody?.text = currentNote.note.noteBody
+
+            val random = java.util.Random()
+            val color = Color.argb(
+                255,
+                random.nextInt(256),
+                random.nextInt(256),
+                random.nextInt(256)
+            )
+            binding?.viewColor?.setBackgroundColor(color)
+
         }.setOnClickListener { mView ->
             val direction = HomeFragmentDirections.actionHomeFragmentToUpdateNoteFragment(currentNote)
             mView.findNavController().navigate(direction)
