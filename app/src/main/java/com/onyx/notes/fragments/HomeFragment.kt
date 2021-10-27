@@ -2,6 +2,7 @@ package com.onyx.notes.fragments
 
 import android.os.Bundle
 import android.view.*
+import android.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
@@ -12,7 +13,7 @@ import com.onyx.notes.databinding.FragmentHomeBinding
 import com.onyx.notes.models.NoteWithHashTags
 import com.onyx.notes.viewmodel.NoteViewModel
 
-class HomeFragment : Fragment(R.layout.fragment_home) {
+class HomeFragment : Fragment(R.layout.fragment_home), SearchView.OnQueryTextListener {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
@@ -42,6 +43,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         binding.fabAddNote.setOnClickListener { mView ->
             mView.findNavController().navigate(R.id.action_homeFragment_to_newNoteFragment)
         }
+        binding.searchView.setOnQueryTextListener(this)
     }
 
     private fun setUpRecyclerView() {
@@ -82,5 +84,25 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onQueryTextSubmit(query: String?): Boolean {
+        if (query != null) {
+            searchNotes(query)
+        }
+        return true
+    }
+
+    override fun onQueryTextChange(query: String?): Boolean {
+        if (query != null) {
+            searchNotes(query)
+        }
+        return true
+    }
+
+    private fun searchNotes(query: String?) {
+        noteViewModel.getNotesByName(query).observe(this, { list ->
+            noteAdapter.differ.submitList(list)
+        })
     }
 }

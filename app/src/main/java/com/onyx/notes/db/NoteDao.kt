@@ -49,4 +49,7 @@ interface NoteDao {
         deleteNote(note)
     }
 
+    @Query("SELECT * FROM notes WHERE instr(noteTitle, :query) > 0")
+    fun getNotesWithHashtagsByName(query: String?): LiveData<List<NoteWithHashTags>>
+
 }

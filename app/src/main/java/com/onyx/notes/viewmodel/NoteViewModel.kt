@@ -1,6 +1,7 @@
 package com.onyx.notes.viewmodel
 
 import android.app.Application
+import android.app.DownloadManager
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.onyx.notes.models.Hashtag
@@ -22,4 +23,5 @@ class NoteViewModel(
     fun deleteNote(note: Note) = viewModelScope.launch {
         noteRepository.deleteNote(note)
     }
+    fun getNotesByName(query: String?) = noteRepository.getNotesByName(query)
 }

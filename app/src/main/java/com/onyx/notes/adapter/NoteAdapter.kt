@@ -15,9 +15,7 @@ import com.onyx.notes.models.NoteWithHashTags
 
 class NoteAdapter: RecyclerView.Adapter<NoteAdapter.NoteViewHolder>() {
 
-    private var binding: NoteLayoutAdapterBinding? = null
-
-    class NoteViewHolder(itemBinding: NoteLayoutAdapterBinding): RecyclerView.ViewHolder(itemBinding.root)
+    class NoteViewHolder(val itemBinding: NoteLayoutAdapterBinding): RecyclerView.ViewHolder(itemBinding.root)
 
     private val differCallback =
         object : DiffUtil.ItemCallback<NoteWithHashTags>() {
@@ -34,28 +32,29 @@ class NoteAdapter: RecyclerView.Adapter<NoteAdapter.NoteViewHolder>() {
     val differ = AsyncListDiffer(this, differCallback)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteViewHolder {
-        binding = NoteLayoutAdapterBinding.inflate(LayoutInflater.from(parent.context),parent,false)
-        return NoteViewHolder(binding!!)
+        return NoteViewHolder(
+            NoteLayoutAdapterBinding.inflate(LayoutInflater.from(parent.context),parent, false)
+        )
     }
 
     override fun onBindViewHolder(holder: NoteViewHolder, position: Int) {
         val currentNote = differ.currentList[position]
-        holder.itemView.apply {
-            binding?.tvNoteTitle?.text = currentNote.note.noteTitle
-            binding?.tvNoteBody?.text = currentNote.note.noteBody
+        holder.itemBinding.tvNoteTitle.text = currentNote.note.noteTitle
+        holder.itemBinding.tvNoteBody.text = currentNote.note.noteBody
 
-            val random = java.util.Random()
-            val color = Color.argb(
-                255,
-                random.nextInt(256),
-                random.nextInt(256),
-                random.nextInt(256)
-            )
-            binding?.viewColor?.setBackgroundColor(color)
+        val random = java.util.Random()
+        val color = Color.argb(
+            255,
+            random.nextInt(256),
+            random.nextInt(256),
+            random.nextInt(256)
+        )
+        holder.itemBinding.viewColor.setBackgroundColor(color)
 
-        }.setOnClickListener { mView ->
-            val direction = HomeFragmentDirections.actionHomeFragmentToUpdateNoteFragment(currentNote)
-            mView.findNavController().navigate(direction)
+        holder.itemView.setOnClickListener { view ->
+            val direction =
+                HomeFragmentDirections.actionHomeFragmentToUpdateNoteFragment(currentNote)
+            view.findNavController().navigate(direction)
         }
     }
 
