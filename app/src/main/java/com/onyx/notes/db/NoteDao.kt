@@ -1,10 +1,7 @@
 package com.onyx.notes.db
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.Query
-import androidx.room.Transaction
+import androidx.room.*
 import com.onyx.notes.models.Hashtag
 import com.onyx.notes.models.Note
 import com.onyx.notes.models.NoteWithHashTags
@@ -27,6 +24,29 @@ interface NoteDao {
         val noteId = addNote(note)
         hashTags.forEach{ it.noteId = noteId.toInt() }
         addHashtags(hashTags)
+    }
+
+    @Update
+    suspend fun updateNote(note: Note)
+
+    @Query("DELETE FROM hashtags WHERE noteId = :noteId")
+    suspend fun deleteNoteHashTags(noteId: Int)
+
+    @Transaction
+    suspend fun updateNoteWithHashtags(note: Note, hashTags: List<Hashtag>) {
+        deleteNoteHashTags(note.id)
+        updateNote(note)
+        hashTags.forEach{ it.noteId = note.id }
+        addHashtags(hashTags)
+    }
+
+    @Delete
+    suspend fun deleteNote(note: Note)
+
+    @Transaction
+    suspend fun deleteNoteWithHashtags(note: Note) {
+        deleteNoteHashTags(note.id)
+        deleteNote(note)
     }
 
 }

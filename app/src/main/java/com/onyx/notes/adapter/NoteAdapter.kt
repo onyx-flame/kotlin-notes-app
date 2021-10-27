@@ -2,10 +2,13 @@ package com.onyx.notes.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.onyx.notes.R
 import com.onyx.notes.databinding.NoteLayoutAdapterBinding
+import com.onyx.notes.fragments.HomeFragmentDirections
 import com.onyx.notes.models.Note
 import com.onyx.notes.models.NoteWithHashTags
 
@@ -39,6 +42,9 @@ class NoteAdapter: RecyclerView.Adapter<NoteAdapter.NoteViewHolder>() {
         holder.itemView.apply {
             binding?.tvNoteTitle?.text = currentNote.note.noteTitle
             binding?.tvNoteBody?.text = currentNote.note.noteBody
+        }.setOnClickListener { mView ->
+            val direction = HomeFragmentDirections.actionHomeFragmentToUpdateNoteFragment(currentNote)
+            mView.findNavController().navigate(direction)
         }
     }
 

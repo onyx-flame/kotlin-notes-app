@@ -27,6 +27,7 @@ data class Hashtag (
 ) : Parcelable
 
 
+@Parcelize
 data class NoteWithHashTags (
     @Embedded
     val note: Note,
@@ -35,4 +36,4 @@ data class NoteWithHashTags (
         entityColumn = "noteId"
     )
     val hashtags: List<Hashtag>
-)
+) : Parcelable

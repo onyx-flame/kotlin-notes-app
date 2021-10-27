@@ -16,4 +16,10 @@ class NoteViewModel(
         noteRepository.addNote(note, hashtags)
     }
     fun getAllNotes() = noteRepository.getAllNotes()
+    fun updateNote(note: Note, hashtags: List<Hashtag>) = viewModelScope.launch {
+        noteRepository.updateNote(note, hashtags)
+    }
+    fun deleteNote(note: Note) = viewModelScope.launch {
+        noteRepository.deleteNote(note)
+    }
 }
