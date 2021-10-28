@@ -28,6 +28,8 @@ class UpdateNoteFragment : Fragment(R.layout.fragment_update_note) {
         super.onCreate(savedInstanceState)
 
         setHasOptionsMenu(true)
+        (activity as MainActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        (activity as MainActivity).supportActionBar?.setDisplayShowHomeEnabled(true)
     }
 
     override fun onCreateView(
@@ -93,6 +95,9 @@ class UpdateNoteFragment : Fragment(R.layout.fragment_update_note) {
         when (item.itemId) {
             R.id.delete_menu -> {
                 deleteNote()
+            }
+            android.R.id.home -> {
+                view?.findNavController()?.navigate(R.id.action_updateNoteFragment_to_homeFragment)
             }
         }
         return super.onOptionsItemSelected(item)

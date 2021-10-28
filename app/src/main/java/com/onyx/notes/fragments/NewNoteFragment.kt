@@ -27,6 +27,8 @@ class NewNoteFragment : Fragment(R.layout.fragment_new_note) {
         super.onCreate(savedInstanceState)
 
         setHasOptionsMenu(true)
+        (activity as MainActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        (activity as MainActivity).supportActionBar?.setDisplayShowHomeEnabled(true)
     }
 
     override fun onCreateView(
@@ -69,6 +71,9 @@ class NewNoteFragment : Fragment(R.layout.fragment_new_note) {
         when(item.itemId) {
             R.id.save_menu -> {
                 saveNote(mView)
+            }
+            android.R.id.home -> {
+                view?.findNavController()?.navigate(R.id.action_newNoteFragment_to_homeFragment)
             }
         }
         return super.onOptionsItemSelected(item)

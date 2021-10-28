@@ -4,8 +4,8 @@
 
     <item
         android:id="@+id/sort_by_date"
-        android:title="Date" />
+        android:title="Sort by Date" />
     <item
         android:id="@+id/sort_by_name"
-        android:title="Name" />
+        android:title="Sort by Name" />
 </menu>
