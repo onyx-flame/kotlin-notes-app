@@ -36,7 +36,6 @@ interface NoteDao {
     suspend fun updateNoteWithHashtags(note: Note, hashTags: List<Hashtag>) {
         deleteNoteHashTags(note.id)
         updateNote(note)
-        hashTags.forEach{ it.noteId = note.id }
         addHashtags(hashTags)
     }
 
@@ -55,5 +54,10 @@ interface NoteDao {
     @Query("SELECT * FROM notes WHERE instr(noteTitle, :query) > 0 ORDER BY lastUpdated DESC")
     fun getNotesWithHashtagsSortedByDate(query: String?): LiveData<List<NoteWithHashTags>>
 
+    @Query("SELECT * FROM notes WHERE id IN (SELECT noteId FROM hashtags WHERE instr(text, :query) > 0) ORDER BY noteTitle ASC")
+    fun getNotesWithHashtagsSortedByNameByHashtag(query: String?): LiveData<List<NoteWithHashTags>>
+
+    @Query("SELECT * FROM notes WHERE id IN (SELECT noteId FROM hashtags WHERE instr(text, :query) > 0) ORDER BY lastUpdated DESC")
+    fun getNotesWithHashtagsSortedByDateByHashtag(query: String?): LiveData<List<NoteWithHashTags>>
 
 }

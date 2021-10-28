@@ -46,13 +46,20 @@ class UpdateNoteFragment : Fragment(R.layout.fragment_update_note) {
         currentNote = args.note!!
         binding.etNoteTitleUpdate.setText(currentNote.note.noteTitle)
         binding.etNoteBodyUpdate.setText(currentNote.note.noteBody)
+        binding.etNoteHashtagsUpdate.setText(currentNote.hashtags.joinToString(",") {it.text})
 
         binding.fabUpdate.setOnClickListener {
             val title = binding.etNoteTitleUpdate.text.toString()
             val body = binding.etNoteBodyUpdate.text.toString()
             if (title.isNotEmpty()) {
                 val note = Note(currentNote.note.id, title, body, Date())
-                val hashtags: List<Hashtag> = listOf(Hashtag(0,0,"tag228"), Hashtag(0,0,"tag337"))
+
+                val hashtagsString: List<String> =
+                    binding.etNoteHashtagsUpdate.text.toString().split(",").map { it -> it.trim() }
+
+                val hashtags: ArrayList<Hashtag> = ArrayList()
+                hashtagsString.forEach { hashtags.add(Hashtag(0,currentNote.note.id,it)) }
+
                 noteViewModel.updateNote(note, hashtags)
 
 

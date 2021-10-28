@@ -70,20 +70,8 @@ class HomeFragment : Fragment(R.layout.fragment_home), SearchView.OnQueryTextLis
             adapter = noteAdapter
         }
         activity?.let {
-            if (sortTypeViewModel.isSortByDate()) {
-                noteViewModel.getNotesSortedByDate().observe(viewLifecycleOwner, { note ->
-                    noteAdapter.differ.submitList(note)
-                    updateUI(note)
-                })
-            }
-            if (sortTypeViewModel.isSortByName()){
-                noteViewModel.getNotesSortedByName().observe(viewLifecycleOwner, { note ->
-                    noteAdapter.differ.submitList(note)
-                    updateUI(note)
-                })
-            }
+            searchNotes(binding.searchView.query.toString())
         }
-
     }
 
     private fun updateUI(note: List<NoteWithHashTags>) {
@@ -108,10 +96,9 @@ class HomeFragment : Fragment(R.layout.fragment_home), SearchView.OnQueryTextLis
             }
             R.id.sort_by_name -> {
                 sortTypeViewModel.setSortByName()
-
             }
         }
-        searchNotes("")
+        searchNotes(binding.searchView.query.toString())
 
         return super.onOptionsItemSelected(item)
     }
@@ -121,26 +108,47 @@ class HomeFragment : Fragment(R.layout.fragment_home), SearchView.OnQueryTextLis
         _binding = null
     }
 
-    override fun onQueryTextSubmit(query: String?): Boolean {
+    override fun onQueryTextSubmit(query: String): Boolean {
         searchNotes(query)
         return true
     }
 
-    override fun onQueryTextChange(query: String?): Boolean {
+    override fun onQueryTextChange(query: String): Boolean {
         searchNotes(query)
         return true
     }
 
-    private fun searchNotes(query: String? = "") {
+    private fun searchNotes(query: String = "") {
         if (sortTypeViewModel.isSortByName()) {
-            noteViewModel.getNotesSortedByName(query).observe(this, { list ->
-                noteAdapter.differ.submitList(list)
-            })
+            if (query.startsWith("#")) {
+                noteViewModel.getNotesSortedByNameByHashtag(query.substring(1)).observe(viewLifecycleOwner, { list ->
+                    noteAdapter.differ.submitList(list)
+                    updateUI(list)
+                })
+            } else {
+                noteViewModel.getNotesSortedByName(query).observe(viewLifecycleOwner, { list ->
+                    noteAdapter.differ.submitList(list)
+                    updateUI(list)
+                })
+            }
         }
         if (sortTypeViewModel.isSortByDate()) {
-            noteViewModel.getNotesSortedByDate(query).observe(this, { list ->
-                noteAdapter.differ.submitList(list)
-            })
+            if (query.startsWith("#")) {
+                noteViewModel.getNotesSortedByDateByHashtag(query.substring(1)).observe(viewLifecycleOwner, { list ->
+                    noteAdapter.differ.submitList(list)
+                    updateUI(list)
+                })
+            } else {
+                noteViewModel.getNotesSortedByDate(query).observe(viewLifecycleOwner, { list ->
+                    noteAdapter.differ.submitList(list)
+                    updateUI(list)
+                })
+            }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        searchNotes(binding.searchView.query.toString())
     }
 }

@@ -24,4 +24,6 @@ class NoteViewModel(
     }
     fun getNotesSortedByName(query: String? = "") = noteRepository.getNotesSortedByName(query)
     fun getNotesSortedByDate(query: String? = "") = noteRepository.getNotesSortedByDate(query)
+    fun getNotesSortedByNameByHashtag(query: String? = "") = noteRepository.getNotesSortedByNameByHashtag(query)
+    fun getNotesSortedByDateByHashtag(query: String? = "") = noteRepository.getNotesSortedByDateByHashtag(query)
 }

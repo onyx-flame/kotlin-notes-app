@@ -11,4 +11,6 @@ class NoteRepository(private val db: NoteDatabase)  {
     suspend fun deleteNote(note: Note) = db.getNoteDao().deleteNoteWithHashtags(note)
     fun getNotesSortedByName(query: String?) = db.getNoteDao().getNotesWithHashtagsSortedByName(query)
     fun getNotesSortedByDate(query: String?) = db.getNoteDao().getNotesWithHashtagsSortedByDate(query)
+    fun getNotesSortedByNameByHashtag(query: String?) = db.getNoteDao().getNotesWithHashtagsSortedByNameByHashtag(query)
+    fun getNotesSortedByDateByHashtag(query: String?) = db.getNoteDao().getNotesWithHashtagsSortedByDateByHashtag(query)
 }
