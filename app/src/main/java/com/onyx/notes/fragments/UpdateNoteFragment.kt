@@ -4,7 +4,6 @@ import android.app.AlertDialog
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
-import android.widget.Toast
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import com.onyx.notes.MainActivity
@@ -14,6 +13,7 @@ import com.onyx.notes.models.Hashtag
 import com.onyx.notes.models.Note
 import com.onyx.notes.models.NoteWithHashTags
 import com.onyx.notes.viewmodel.NoteViewModel
+import java.text.SimpleDateFormat
 import java.util.*
 
 class UpdateNoteFragment : Fragment(R.layout.fragment_update_note) {
@@ -49,24 +49,25 @@ class UpdateNoteFragment : Fragment(R.layout.fragment_update_note) {
         binding.etNoteHashtagsUpdate.setText(currentNote.hashtags.joinToString(",") {it.text})
 
         binding.fabUpdate.setOnClickListener {
-            val title = binding.etNoteTitleUpdate.text.toString()
-            val body = binding.etNoteBodyUpdate.text.toString()
-            if (title.isNotEmpty()) {
-                val note = Note(currentNote.note.id, title, body, Date())
-
-                val hashtagsString: List<String> =
-                    binding.etNoteHashtagsUpdate.text.toString().split(",").map { it -> it.trim() }
-
-                val hashtags: ArrayList<Hashtag> = ArrayList()
-                hashtagsString.forEach { hashtags.add(Hashtag(0,currentNote.note.id,it)) }
-
-                noteViewModel.updateNote(note, hashtags)
-
-
-                view.findNavController().navigate(R.id.action_updateNoteFragment_to_homeFragment)
-            } else {
-                Toast.makeText(this.context, "Title is empty!", Toast.LENGTH_SHORT).show()
+            var noteTitle = binding.etNoteTitleUpdate.text.toString().trim()
+            val noteHashtags = binding.etNoteHashtagsUpdate.text.toString().trim()
+            val noteBody = binding.etNoteBodyUpdate.text.toString().trim()
+            if (noteTitle.isEmpty()) {
+                val calendar = Calendar.getInstance(TimeZone.getDefault())
+                val formatter = SimpleDateFormat("HH:mm:ss dd.MM.yyyy")
+                noteTitle = formatter.format(calendar.time).toString()
             }
+            val note = Note(currentNote.note.id, noteTitle, noteBody, Date())
+
+            val hashtags: ArrayList<Hashtag> = ArrayList()
+            if (noteHashtags != "") {
+                val hashtagsString: List<String> = noteHashtags.split(",").map { it.trim() }
+                hashtagsString.forEach { hashtags.add(Hashtag(0,currentNote.note.id,it)) }
+            }
+            noteViewModel.updateNote(note, hashtags)
+
+
+            view.findNavController().navigate(R.id.action_updateNoteFragment_to_homeFragment)
         }
     }
 

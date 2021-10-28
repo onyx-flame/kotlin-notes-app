@@ -12,8 +12,11 @@ import com.onyx.notes.databinding.NoteLayoutAdapterBinding
 import com.onyx.notes.fragments.HomeFragmentDirections
 import com.onyx.notes.models.Note
 import com.onyx.notes.models.NoteWithHashTags
+import java.text.SimpleDateFormat
 
 class NoteAdapter: RecyclerView.Adapter<NoteAdapter.NoteViewHolder>() {
+
+    private val formatter = SimpleDateFormat("HH:mm:ss dd.MM.yyyy")
 
     class NoteViewHolder(val itemBinding: NoteLayoutAdapterBinding): RecyclerView.ViewHolder(itemBinding.root)
 
@@ -40,7 +43,16 @@ class NoteAdapter: RecyclerView.Adapter<NoteAdapter.NoteViewHolder>() {
     override fun onBindViewHolder(holder: NoteViewHolder, position: Int) {
         val currentNote = differ.currentList[position]
         holder.itemBinding.tvNoteTitle.text = currentNote.note.noteTitle
+        val currentNoteDate =
+            if (currentNote.hashtags.isNotEmpty()) {
+                "#" + currentNote.hashtags.joinToString(",#") {it.text}
+            } else {
+                ""
+            }
+        holder.itemBinding.tvNoteHashtags.text = currentNoteDate
         holder.itemBinding.tvNoteBody.text = currentNote.note.noteBody
+        holder.itemBinding.tvNoteDate.text = formatter.format(currentNote.note.lastUpdated)
+
 
         val random = java.util.Random()
         val color = Color.argb(

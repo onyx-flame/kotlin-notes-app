@@ -34,7 +34,9 @@
                     android:text="Note Title"
                     android:textColor="@color/black"
                     android:textSize="@dimen/_20ssp"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold"
+                    android:ellipsize="end"
+                    android:maxLines="2"/>
 
                 <View
                     android:id="@+id/view_color"
@@ -47,15 +49,35 @@
             </LinearLayout>
 
             <TextView
+                android:id="@+id/tvNoteHashtags"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxHeight="@dimen/_170sdp"
+                android:text="#hash1, #hash2, #hash3"
+                android:textColor="@color/hintColor"
+                android:textSize="@dimen/_10ssp"/>
+
+            <TextView
                 android:id="@+id/tvNoteBody"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
                 android:maxHeight="@dimen/_170sdp"
                 android:text="Note Body..."
                 android:textColor="@color/hintColor"
                 android:textSize="@dimen/_16ssp"
-                android:textStyle="bold"/>
+                android:textStyle="bold"
+                android:ellipsize="end"/>
 
+            <TextView
+                android:id="@+id/tvNoteDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:maxHeight="@dimen/_170sdp"
+                android:text="10:00:00 01.01.2021"
+                android:textColor="@color/hintColor"
+                android:textSize="@dimen/_10ssp"/>
 
 
         </LinearLayout>

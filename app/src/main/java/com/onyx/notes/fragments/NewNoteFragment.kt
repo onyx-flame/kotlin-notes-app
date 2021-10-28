@@ -12,6 +12,7 @@ import com.onyx.notes.databinding.FragmentNewNoteBinding
 import com.onyx.notes.models.Hashtag
 import com.onyx.notes.models.Note
 import com.onyx.notes.viewmodel.NoteViewModel
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -44,22 +45,24 @@ class NewNoteFragment : Fragment(R.layout.fragment_new_note) {
     }
 
     private fun saveNote(view: View) {
-        val noteTitle = binding.etNoteTitle.text.toString().trim()
+        var noteTitle = binding.etNoteTitle.text.toString().trim()
+        val noteHashtags = binding.etNoteHashtags.text.toString().trim()
         val noteBody = binding.etNoteBody.text.toString().trim()
-        if (noteTitle.isNotEmpty()) {
-            val note = Note(0,noteTitle,noteBody, Date())
-            val hashtagsString: List<String> =
-                binding.etNoteHashtags.text.toString().split(",").map { it -> it.trim() }
-
-            val hashtags: ArrayList<Hashtag> = ArrayList()
-            hashtagsString.forEach { hashtags.add(Hashtag(0,0,it)) }
-            noteViewModel.addNote(note, hashtags)
-            Snackbar.make(view, "Note saved", Snackbar.LENGTH_SHORT).show()
-
-            view.findNavController().navigate(R.id.action_newNoteFragment_to_homeFragment)
-        } else {
-            Toast.makeText(this.context, "Enter note title", Toast.LENGTH_SHORT).show()
+        if (noteTitle.isEmpty()) {
+            val calendar = Calendar.getInstance(TimeZone.getDefault())
+            val formatter = SimpleDateFormat("HH:mm:ss dd.MM.yyyy")
+            noteTitle = formatter.format(calendar.time).toString()
         }
+        val note = Note(0,noteTitle,noteBody, Date())
+        val hashtags: ArrayList<Hashtag> = ArrayList()
+        if (noteHashtags != "") {
+            val hashtagsString: List<String> = noteHashtags.split(",").map { it.trim() }
+            hashtagsString.forEach { hashtags.add(Hashtag(0,0,it)) }
+        }
+        noteViewModel.addNote(note, hashtags)
+        Snackbar.make(view, "Note saved", Snackbar.LENGTH_SHORT).show()
+
+        view.findNavController().navigate(R.id.action_newNoteFragment_to_homeFragment)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
