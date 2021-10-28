@@ -25,7 +25,6 @@ class NewNoteFragment : Fragment(R.layout.fragment_new_note) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setHasOptionsMenu(true)
         (activity as MainActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
         (activity as MainActivity).supportActionBar?.setDisplayShowHomeEnabled(true)
@@ -41,7 +40,6 @@ class NewNoteFragment : Fragment(R.layout.fragment_new_note) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         noteViewModel = (activity as MainActivity).noteViewModel
         mView = view
     }
@@ -62,8 +60,7 @@ class NewNoteFragment : Fragment(R.layout.fragment_new_note) {
             hashtagsString.forEach { hashtags.add(Hashtag(0,0,it)) }
         }
         noteViewModel.addNote(note, hashtags)
-        Snackbar.make(view, "Note saved", Snackbar.LENGTH_SHORT).show()
-
+        Snackbar.make(view, "Note saved!", Snackbar.LENGTH_SHORT).show()
         view.findNavController().navigate(R.id.action_newNoteFragment_to_homeFragment)
     }
 
@@ -78,7 +75,6 @@ class NewNoteFragment : Fragment(R.layout.fragment_new_note) {
         }
         return super.onOptionsItemSelected(item)
     }
-
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)

@@ -53,7 +53,6 @@ class NoteAdapter: RecyclerView.Adapter<NoteAdapter.NoteViewHolder>() {
         holder.itemBinding.tvNoteBody.text = currentNote.note.noteBody
         holder.itemBinding.tvNoteDate.text = formatter.format(currentNote.note.lastUpdated)
 
-
         val random = java.util.Random()
         val color = Color.argb(
             255,

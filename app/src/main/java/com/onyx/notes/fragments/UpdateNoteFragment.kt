@@ -6,6 +6,7 @@ import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
+import com.google.android.material.snackbar.Snackbar
 import com.onyx.notes.MainActivity
 import com.onyx.notes.R
 import com.onyx.notes.databinding.FragmentUpdateNoteBinding
@@ -26,7 +27,6 @@ class UpdateNoteFragment : Fragment(R.layout.fragment_update_note) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setHasOptionsMenu(true)
         (activity as MainActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
         (activity as MainActivity).supportActionBar?.setDisplayShowHomeEnabled(true)
@@ -42,14 +42,11 @@ class UpdateNoteFragment : Fragment(R.layout.fragment_update_note) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         noteViewModel = (activity as MainActivity).noteViewModel
-
         currentNote = args.note!!
         binding.etNoteTitleUpdate.setText(currentNote.note.noteTitle)
         binding.etNoteBodyUpdate.setText(currentNote.note.noteBody)
         binding.etNoteHashtagsUpdate.setText(currentNote.hashtags.joinToString(",") {it.text})
-
         binding.fabUpdate.setOnClickListener {
             var noteTitle = binding.etNoteTitleUpdate.text.toString().trim()
             val noteHashtags = binding.etNoteHashtagsUpdate.text.toString().trim()
@@ -60,15 +57,13 @@ class UpdateNoteFragment : Fragment(R.layout.fragment_update_note) {
                 noteTitle = formatter.format(calendar.time).toString()
             }
             val note = Note(currentNote.note.id, noteTitle, noteBody, Date())
-
             val hashtags: ArrayList<Hashtag> = ArrayList()
             if (noteHashtags != "") {
                 val hashtagsString: List<String> = noteHashtags.split(",").map { it.trim() }
                 hashtagsString.forEach { hashtags.add(Hashtag(0,currentNote.note.id,it)) }
             }
             noteViewModel.updateNote(note, hashtags)
-
-
+            Snackbar.make(view, "Note updated!", Snackbar.LENGTH_SHORT).show()
             view.findNavController().navigate(R.id.action_updateNoteFragment_to_homeFragment)
         }
     }
@@ -79,6 +74,7 @@ class UpdateNoteFragment : Fragment(R.layout.fragment_update_note) {
             setMessage("Are you sure to delete this note?")
             setPositiveButton("Delete") { _,_ ->
                 noteViewModel.deleteNote(currentNote.note)
+                Snackbar.make(requireView(), "Note deleted!", Snackbar.LENGTH_SHORT).show()
                 view?.findNavController()?.navigate(R.id.action_updateNoteFragment_to_homeFragment)
             }
             setNegativeButton("Cancel", null)

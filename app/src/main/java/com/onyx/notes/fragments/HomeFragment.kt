@@ -26,7 +26,6 @@ class HomeFragment : Fragment(R.layout.fragment_home), SearchView.OnQueryTextLis
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setHasOptionsMenu(true)
         (activity as MainActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
         (activity as MainActivity).supportActionBar?.setDisplayShowHomeEnabled(false)
@@ -42,11 +41,9 @@ class HomeFragment : Fragment(R.layout.fragment_home), SearchView.OnQueryTextLis
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         noteViewModel = (activity as MainActivity).noteViewModel
         sortTypeViewModel = ViewModelProvider(requireActivity()).get(SortTypeViewModel::class.java)
         setUpRecyclerView()
-
         binding.fabAddNote.setOnClickListener { mView ->
             mView.findNavController().navigate(R.id.action_homeFragment_to_newNoteFragment)
         }
@@ -61,13 +58,11 @@ class HomeFragment : Fragment(R.layout.fragment_home), SearchView.OnQueryTextLis
             } else {
                 1
             }
-
         binding.recyclerView.apply {
             layoutManager = StaggeredGridLayoutManager(
                 spanCount,
                 StaggeredGridLayoutManager.VERTICAL
             )
-
             setHasFixedSize(true)
             adapter = noteAdapter
         }
@@ -101,7 +96,6 @@ class HomeFragment : Fragment(R.layout.fragment_home), SearchView.OnQueryTextLis
             }
         }
         searchNotes(binding.searchView.query.toString())
-
         return super.onOptionsItemSelected(item)
     }
 

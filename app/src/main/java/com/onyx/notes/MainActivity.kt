@@ -12,7 +12,6 @@ import com.onyx.notes.viewmodel.NoteViewModelProviderFactory
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-
     lateinit var noteViewModel: NoteViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {

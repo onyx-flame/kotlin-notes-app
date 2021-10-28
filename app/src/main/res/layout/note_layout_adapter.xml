@@ -39,7 +39,7 @@
                     android:maxLines="2"/>
 
                 <View
-                    android:id="@+id/view_color"
+                    android:id="@+id/viewColor"
                     android:layout_width="@dimen/_10sdp"
                     android:layout_height="@dimen/_10sdp"
                     android:layout_marginEnd="@dimen/_8sdp"

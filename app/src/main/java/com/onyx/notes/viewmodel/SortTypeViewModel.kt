@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 class SortTypeViewModel : ViewModel() {
+
     private val sortType = MutableLiveData<Boolean>(true)
 
     fun setSortByDate() {
@@ -21,6 +22,5 @@ class SortTypeViewModel : ViewModel() {
     fun isSortByName(): Boolean {
         return (sortType.value == false)
     }
-
 
 }
