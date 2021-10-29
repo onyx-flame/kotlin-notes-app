@@ -48,16 +48,16 @@ interface NoteDao {
         deleteNote(note)
     }
 
-    @Query("SELECT * FROM notes WHERE instr(noteTitle, :query) > 0 ORDER BY noteTitle ASC")
+    @Query("SELECT * FROM notes WHERE instr(lower(noteTitle), lower(:query)) > 0 ORDER BY noteTitle ASC")
     fun getNotesWithHashtagsSortedByName(query: String?): LiveData<List<NoteWithHashTags>>
 
-    @Query("SELECT * FROM notes WHERE instr(noteTitle, :query) > 0 ORDER BY lastUpdated DESC")
+    @Query("SELECT * FROM notes WHERE instr(lower(noteTitle), lower(:query)) > 0 ORDER BY lastUpdated DESC")
     fun getNotesWithHashtagsSortedByDate(query: String?): LiveData<List<NoteWithHashTags>>
 
-    @Query("SELECT * FROM notes WHERE id IN (SELECT noteId FROM hashtags WHERE instr(text, :query) > 0) ORDER BY noteTitle ASC")
+    @Query("SELECT * FROM notes WHERE id IN (SELECT noteId FROM hashtags WHERE instr(lower(text), lower(:query)) > 0) ORDER BY noteTitle ASC")
     fun getNotesWithHashtagsSortedByNameByHashtag(query: String?): LiveData<List<NoteWithHashTags>>
 
-    @Query("SELECT * FROM notes WHERE id IN (SELECT noteId FROM hashtags WHERE instr(text, :query) > 0) ORDER BY lastUpdated DESC")
+    @Query("SELECT * FROM notes WHERE id IN (SELECT noteId FROM hashtags WHERE instr(lower(text), lower(:query)) > 0) ORDER BY lastUpdated DESC")
     fun getNotesWithHashtagsSortedByDateByHashtag(query: String?): LiveData<List<NoteWithHashTags>>
 
 }

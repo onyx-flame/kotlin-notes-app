@@ -67,7 +67,7 @@ class HomeFragment : Fragment(R.layout.fragment_home), SearchView.OnQueryTextLis
             adapter = noteAdapter
         }
         activity?.let {
-            searchNotes(binding.searchView.query.toString())
+            searchNotes(binding.searchView.query.toString().trim())
         }
     }
 
@@ -105,12 +105,12 @@ class HomeFragment : Fragment(R.layout.fragment_home), SearchView.OnQueryTextLis
     }
 
     override fun onQueryTextSubmit(query: String): Boolean {
-        searchNotes(query)
+        searchNotes(query.trim())
         return true
     }
 
     override fun onQueryTextChange(query: String): Boolean {
-        searchNotes(query)
+        searchNotes(query.trim())
         return true
     }
 
@@ -145,6 +145,6 @@ class HomeFragment : Fragment(R.layout.fragment_home), SearchView.OnQueryTextLis
 
     override fun onResume() {
         super.onResume()
-        searchNotes(binding.searchView.query.toString())
+        searchNotes(binding.searchView.query.toString().trim())
     }
 }
